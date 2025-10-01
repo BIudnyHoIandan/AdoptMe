@@ -1,0 +1,89 @@
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Create the main frame for the loading screen
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 300, 0, 100)
+frame.Position = UDim2.new(0.5, -150, 0.5, -50)
+frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+frame.BorderSizePixel = 0
+frame.Parent = screenGui
+
+-- Add the title
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(0, 200, 0, 30)
+title.Position = UDim2.new(0, 60, 0, 10)
+title.BackgroundTransparency = 1
+title.Text = "Adopt Me Trade Scam"
+title.TextColor3 = Color3.fromRGB(147, 112, 219) -- Purple text
+title.TextSize = 20
+title.Font = Enum.Font.Cartoon -- Changed to Cartoon
+title.Parent = frame
+
+-- Add a small photo next to the title
+local photo = Instance.new("ImageLabel")
+photo.Size = UDim2.new(0, 50, 0, 30)
+photo.Position = UDim2.new(0, 10, 0, 10)
+photo.BackgroundTransparency = 1
+photo.Image = "rbxassetid://YOUR_PHOTO_ID" -- Replace with your small photo ID
+photo.Parent = frame
+
+-- Add the "Loading" text
+local loadingText = Instance.new("TextLabel")
+loadingText.Size = UDim2.new(0, 200, 0, 20)
+loadingText.Position = UDim2.new(0, 60, 0, 40)
+loadingText.BackgroundTransparency = 1
+loadingText.Text = "Loading"
+loadingText.TextColor3 = Color3.fromRGB(255, 255, 255)
+loadingText.TextSize = 16
+loadingText.Font = Enum.Font.Cartoon -- Changed to Cartoon
+loadingText.Parent = frame
+
+-- Add the loading bar background
+local loadingBarBackground = Instance.new("Frame")
+loadingBarBackground.Size = UDim2.new(0, 200, 0, 20)
+loadingBarBackground.Position = UDim2.new(0, 50, 0, 70)
+loadingBarBackground.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+loadingBarBackground.BorderSizePixel = 0
+loadingBarBackground.Parent = frame
+
+-- Add the loading bar
+local loadingBar = Instance.new("Frame")
+loadingBar.Size = UDim2.new(0, 0, 0, 20)
+loadingBar.Position = UDim2.new(0, 0, 0, 0)
+loadingBar.BackgroundColor3 = Color3.fromRGB(147, 112, 219) -- Purple loading bar
+loadingBar.BorderSizePixel = 0
+loadingBar.Parent = loadingBarBackground
+
+-- Add the percentage text
+local percentText = Instance.new("TextLabel")
+percentText.Size = UDim2.new(0, 50, 0, 20)
+percentText.Position = UDim2.new(0, 250, 0, 70)
+percentText.BackgroundTransparency = 1
+percentText.Text = "0%"
+percentText.TextColor3 = Color3.fromRGB(255, 255, 255)
+percentText.TextSize = 16
+percentText.Font = Enum.Font.Cartoon -- Changed to Cartoon
+percentText.Parent = frame
+
+-- Loading animation (100 seconds)
+local tweenService = game:GetService("TweenService")
+local tweenInfo = TweenInfo.new(100, Enum.EasingStyle.Linear)
+local tween = tweenService:Create(loadingBar, tweenInfo, {Size = UDim2.new(1, 0, 1, 0)})
+tween:Play()
+
+-- Update percentage text incrementally
+local percent = 0
+spawn(function()
+    while percent <= 100 do
+        wait(0.5) -- 200 seconds / 200 = 1 seconds per 0.5%
+        percent = percent + 1
+        percentText.Text = percent .. "%"
+        loadingBar.Size = UDim2.new(0, (percent / 100) * 200, 0, 20)
+    end
+end)
+
+-- Clean up when done
+tween.Completed:Connect(function()
+    screenGui:Destroy()
+end)
